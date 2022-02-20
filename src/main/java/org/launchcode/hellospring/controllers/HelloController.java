@@ -1,7 +1,11 @@
 package org.launchcode.hellospring.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Chris Bay
@@ -23,12 +27,18 @@ public class HelloController {
     }
 
     // Handles requests of the form /hello?name=LaunchCode
+//    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "hello")
+//    @ResponseBody
+//    public String helloWithQueryParam(@RequestParam String name) {
+//        return "Hello, " + name + "!";
+//    }
+    //dynamic templates with chris
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "hello")
-    @ResponseBody
-    public String helloWithQueryParam(@RequestParam String name) {
-        return "Hello, " + name + "!";
+    public String hello(@RequestParam String name , Model model) {
+        String thegreeting = "Hello, " + name + "!";
+        model.addAttribute("greeting", thegreeting);
+        return "hello";
     }
-
     // Handles requests of the form /hello/LaunchCode
     @GetMapping("hello/{name}")
     @ResponseBody
@@ -38,16 +48,20 @@ public class HelloController {
 
 
     @GetMapping("form")
-    @ResponseBody
     public String helloForm() {
-        return "<html>" +
-                "<body>" +
-                "<form action = 'hello' method = 'post'>" + // submit a request to /hello
-                "<input type = 'text' name = 'name' >" +
-                "<input type = 'submit' value = 'Greet Me!' >" +
-                "</form>" +
-                "</body>" +
-                "</html>";
+        return "form";
+
+    }
+    @GetMapping("hello-names")
+    public String helloName(Model model){
+        List<String> names = new ArrayList<>();
+        names.add("LaunchCode");
+        names.add("Java");
+        names.add("JavaScript");
+        names.add("Html");
+        model.addAttribute("names", names);
+        return "hello-list";
+
     }
 
 }
